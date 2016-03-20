@@ -1,0 +1,11 @@
+<queue-entries>
+	<queue>
+		<name>crawl</name>
+		<rate>5/m</rate>
+		<bucket-size>1</bucket-size>
+		<retry-parameters>
+			<task-retry-limit>3</task-retry-limit>
+			<task-age-limit>1d</task-age-limit>
+		</retry-parameters>
+	</queue>
+</queue-entries>
