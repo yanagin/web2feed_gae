@@ -110,7 +110,7 @@ public class ResponseParser {
 			path = url.substring(to, to + url.substring(to).lastIndexOf("/") + 1);
 		}
 
-		String baseUrl = protocol + "://" + domain + path;
+		String baseUrl = protocol + "://" + domain + "/";
 		
 		for (String link : links) {
 			String internalLink = getInternalLink(protocol, domain, path, link);
