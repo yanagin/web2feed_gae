@@ -18,5 +18,9 @@ public class MemcacheUtils {
 		}
 		return (Entity)obj;
 	}
+	
+	public static void remove(Key key) {
+		MemcacheServiceFactory.getMemcacheService().put(key, null);
+	}
 
 }

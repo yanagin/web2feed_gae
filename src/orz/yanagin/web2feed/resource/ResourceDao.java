@@ -12,6 +12,7 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
 
 import orz.yanagin.web2feed.datastore.DaoBase;
+import orz.yanagin.web2feed.datastore.MemcacheUtils;
 
 public class ResourceDao extends DaoBase {
 	
@@ -105,6 +106,8 @@ public class ResourceDao extends DaoBase {
 			}
 			
 			keys.add(resource.getKey());
+			
+			MemcacheUtils.remove(resource.getKey());
 		}
 		
 		if (keys == null || keys.isEmpty()) {
