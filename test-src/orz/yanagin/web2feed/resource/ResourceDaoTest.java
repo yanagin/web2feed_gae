@@ -115,7 +115,7 @@ public class ResourceDaoTest extends TestBase {
 	static Resource create(String url, Date... updatedAt) {
 		Resource result = new Resource();
 		result.setUrl(url);
-		if (updatedAt != null) {
+		if (updatedAt != null && updatedAt.length > 0) {
 			result.setUpdatedAt(updatedAt[0]);
 		}
 		return result;
