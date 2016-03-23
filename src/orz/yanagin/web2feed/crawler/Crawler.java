@@ -58,6 +58,7 @@ public class Crawler {
 			QueueDao queueDao = new QueueDao();
 
 			Response response = getResponse(url, queue.getUpdatedAt());
+			url = response.url().toString();
 			if (!isModified(response, queue.getUpdatedAt())) {
 				logger.info("コンテンツが更新されていません。url->" + url + " status->" + response.statusCode());
 				return;
@@ -93,7 +94,7 @@ public class Crawler {
 				}
 				
 				links.add(internalLink);
-//				logger.info("キューに内部リンクを登録しました。internalLink->" + internalLink);
+				logger.info("キューに内部リンクを登録しました。internalLink->" + internalLink);
 			}
 			queueDao.regist(links);
 		} catch (MalformedURLException e) {
