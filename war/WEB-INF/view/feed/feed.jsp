@@ -8,7 +8,7 @@
 			<% java.util.List<orz.yanagin.web2feed.resource.Resource> resources = (java.util.List<orz.yanagin.web2feed.resource.Resource>)request.getAttribute("resources"); %>
 			<% for (orz.yanagin.web2feed.resource.Resource resource : resources) { %>
 				<item>
-					<title><%= resource.getTitle() %></title>
+					<title><![CDATA[<%= resource.getTitle() %>]]></title>
 					<link><%= resource.getUrl() %></link>
 					<description><![CDATA[<%= resource.getDescription() %>]]></description>
 					<pubDate><%= resource.getDate() %></pubDate>
