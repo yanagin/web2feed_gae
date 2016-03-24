@@ -62,11 +62,16 @@ public class ResponseParserTest {
 						"http://abc.com/index4.html",
 						"http://abc.com/path2/index5.html",
 						"https://abc.com/path/index6.html",
+						"/path/index7.html",
 						null));
 
-		assertThat(links.size(), is(2));
+		assertThat(links.size(), is(6));
 		assertThat(links.contains("http://abc.com/path/index1.html"), is(true));
+		assertThat(links.contains("http://abc.com/index2.html"), is(true));
 		assertThat(links.contains("http://abc.com/path/index3.html"), is(true));
+		assertThat(links.contains("http://abc.com/index4.html"), is(true));
+		assertThat(links.contains("http://abc.com/path2/index5.html"), is(true));
+		assertThat(links.contains("http://abc.com/path/index7.html"), is(true));
 	}
 
 	@Test
@@ -82,9 +87,12 @@ public class ResponseParserTest {
 						"https://abc.com/path/index6.html",
 						null));
 
-		assertThat(links.size(), is(2));
+		assertThat(links.size(), is(5));
 		assertThat(links.contains("http://abc.com/path/index1.html"), is(true));
+		assertThat(links.contains("http://abc.com/index2.html"), is(true));
 		assertThat(links.contains("http://abc.com/path/index3.html"), is(true));
+		assertThat(links.contains("http://abc.com/index4.html"), is(true));
+		assertThat(links.contains("http://abc.com/path2/index5.html"), is(true));
 	}
 
 	@Test
@@ -142,7 +150,42 @@ public class ResponseParserTest {
 		assertThat(links.contains("http://abc.com/index1.html?category=1&area_data_id=6"), is(true));
 		assertThat(links.contains("http://abc.com/product/index.html/?category=1&area_data_id=3"), is(true));
 	}
-	
+
+	@Test
+	public void testGetInternalLinks7() {
+		List<String> links = ResponseParser.getInternalLinks(
+				"http://fc.lawson.co.jp", 
+				Arrays.asList(
+						"affiliate/index1.html",
+						"/affiliate/index1.html",
+						"/affiliate",
+						"affiliate/",
+						"/affiliate/",
+						null));
+
+		assertThat(links.size(), is(3));
+		assertThat(links.contains("http://fc.lawson.co.jp/affiliate/index1.html"), is(true));
+		assertThat(links.contains("http://fc.lawson.co.jp/affiliate"), is(true));
+		assertThat(links.contains("http://fc.lawson.co.jp/affiliate/"), is(true));
+	}
+
+	@Test
+	public void testGetInternalLinks8() {
+		List<String> links = ResponseParser.getInternalLinks(
+				"http://fc.lawson.co.jp/affiliate/", 
+				Arrays.asList(
+						"/affiliate/index1.html", 
+						"/affiliate",
+						"/affiliate/",
+						"affiliate/",
+						null));
+
+		assertThat(links.size(), is(3));
+		assertThat(links.contains("http://fc.lawson.co.jp/affiliate/index1.html"), is(true));
+		assertThat(links.contains("http://fc.lawson.co.jp/affiliate"), is(true));
+		assertThat(links.contains("http://fc.lawson.co.jp/affiliate/"), is(true));
+	}
+
 	@Test
 	public void testGetCharsetUTF8() throws IOException {
 		Response response = Jsoup.connect("http://www.lawson.co.jp/recommend/")
