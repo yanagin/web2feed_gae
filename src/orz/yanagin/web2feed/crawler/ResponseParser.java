@@ -132,7 +132,7 @@ public class ResponseParser {
 		
 		link = link.toLowerCase();
 
-		if (link.toLowerCase().startsWith("javascript")) {
+		if (link.startsWith("javascript")) {
 			return null;
 		}
 		if (link.startsWith("#")) {
