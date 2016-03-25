@@ -133,6 +133,22 @@ public class CrawlerTest extends TestBase {
 	}
 	
 	@Test
+	public void test_crawl_lawson2() throws IOException {
+		Queue queue = new Queue();
+		queue.setUrl("http://www.lawson.co.jp/recommend/new/list/1266523_5162.html");
+		queue.setUpdatedAt(new Date());
+		new Crawler().crawl(queue);
+	}
+	
+	@Test
+	public void test_crawl_lawson3() throws IOException {
+		Queue queue = new Queue();
+		queue.setUrl("http://www.lawson.co.jp/company/fc/affiliate/");
+		queue.setUpdatedAt(new Date());
+		new Crawler().crawl(queue);
+	}
+	
+	@Test
 	public void test_crawl_familymart() throws IOException {
 		Queue queue = new Queue();
 		queue.setUrl("http://www.family.co.jp/goods/thisweek/kanto_01.html");

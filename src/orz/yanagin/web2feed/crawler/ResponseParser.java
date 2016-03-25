@@ -26,7 +26,7 @@ public class ResponseParser {
 	private final String charset;
 	
 	private final Document document;
-
+	
 	public ResponseParser(String url, Response response) throws IOException {
 		this.url = url;
 		this.response = response;
@@ -88,32 +88,22 @@ public class ResponseParser {
 	}
 
 	public List<String> getInternalLinks() {
-		return getInternalLinks(url, getLinks());
+		return getInternalLinks(url, response.url().toString(), getLinks());
 	}
 	
-	static List<String> getInternalLinks(String url, List<String> links) {
+	static List<String> getInternalLinks(String requestUrl, String responseUrl, List<String> links) {
 		Set<String> internalLinks = new HashSet<>();
 		
-		if (url == null || links == null || links.isEmpty()) {
+		if (requestUrl == null || links == null || links.isEmpty()) {
 			return new ArrayList<>();
 		}
 
-		int from = url.indexOf("://");
-		int to = url.indexOf("/", from + 3);
-		if (to < 0) {
-			to = url.length();
-		}
-		String protocol = url.substring(0, from);
-		String domain = url.substring(from + 3, to);
-		String path = "/";
-		if (url.substring(to).contains("/")) {
-			path = url.substring(to, to + url.substring(to).lastIndexOf("/") + 1);
-		}
-
-		String baseUrl = protocol + "://" + domain + "/";
+		String baseUrl = getBaseUrl(requestUrl);
+		String responseUrlBase = getBaseUrl(responseUrl);
+		String responseUrlPath = getPath(responseUrl);
 		
 		for (String link : links) {
-			String internalLink = getInternalLink(protocol, domain, path, link);
+			String internalLink = getInternalLink(responseUrlBase, responseUrlPath, link);
 			if (internalLink == null) {
 				continue;
 			}
@@ -125,7 +115,31 @@ public class ResponseParser {
 		return new ArrayList<>(internalLinks);
 	}
 	
-	static String getInternalLink(String protocol, String domain, String path, String link) {
+	static String getBaseUrl(String url) {
+		int from = url.indexOf("://");
+		int to = url.indexOf("/", from + 3);
+		if (to < 0) {
+			to = url.length();
+		}
+		String protocol = url.substring(0, from);
+		String domain = url.substring(from + 3, to);
+		return protocol + "://" + domain;
+	}
+	
+	static String getPath(String url) {
+		int from = url.indexOf("://");
+		int to = url.indexOf("/", from + 3);
+		if (to < 0) {
+			to = url.length();
+		}
+		String path = "/";
+		if (url.substring(to).contains("/")) {
+			path = url.substring(to, to + url.substring(to).lastIndexOf("/") + 1);
+		}
+		return path;
+	}
+	
+	static String getInternalLink(String baseUrl, String path, String link) {
 		if (link == null || "".equals(link)) {
 			return null;
 		}
@@ -183,14 +197,14 @@ public class ResponseParser {
 			}
 		}
 		
-		if (link.startsWith(protocol + "://" + domain)) {
+		if (link.startsWith(baseUrl)) {
 			return link;
 		}
 		if (link.startsWith("/")) {
-			return protocol + "://" + domain + link;
+			return baseUrl + link;
 		}
 		if (!link.startsWith("http")) {
-			return protocol + "://" + domain + path + link;
+			return baseUrl + path + link;
 		}
 		
 		return null;

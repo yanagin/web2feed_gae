@@ -58,7 +58,6 @@ public class Crawler {
 			QueueDao queueDao = new QueueDao();
 
 			Response response = getResponse(url, queue.getUpdatedAt());
-			url = response.url().toString();
 			if (!isModified(response, queue.getUpdatedAt())) {
 				logger.info("コンテンツが更新されていません。url->" + url + " status->" + response.statusCode());
 				return;
